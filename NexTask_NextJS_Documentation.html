@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexTask Technical Documentation</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --dark: #0f172a;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background: #ffffff;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        h1 { color: var(--dark); font-size: 2.5rem; margin-bottom: 10px; }
+        h2 { color: var(--dark); border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 40px; }
+        h3 { color: var(--primary); margin-top: 25px; }
+        .subtitle { color: var(--text-light); font-size: 1.2rem; margin-bottom: 40px; }
+        .highlight-box {
+            background: var(--bg-light);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        th { background: var(--bg-light); color: var(--dark); }
+        code {
+            background: var(--bg-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #db2777;
+        }
+        .code-block {
+            background: var(--dark);
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: monospace;
+            margin: 20px 0;
+        }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+        @media print {
+            body { padding: 0; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>NexTask Architecture & Technical Specifications</h1>
+    <div class="subtitle">A Modern Full-Stack AI Productivity Application</div>
+
+    <div class="highlight-box">
+        <strong>Executive Summary:</strong> NexTask is an enterprise-grade task management system migrated from a Vanilla JavaScript prototype into a highly scalable, full-stack Next.js application. It leverages Cloud PostgreSQL (Supabase) for data persistence and Google's Gemini AI for natural language processing and automated categorization.
+    </div>
+
+    <h2>1. The Technology Stack</h2>
+    <table>
+        <tr>
+            <th>Technology</th>
+            <th>Role in Project</th>
+            <th>Why We Chose It (The "Why")</th>
+        </tr>
+        <tr>
+            <td><strong>Next.js (React)</strong></td>
+            <td>Frontend Framework & UI Architecture</td>
+            <td>React allows for highly modular, component-based UI development. Next.js was chosen specifically for its App Router, optimized build system, and industry-standard dominance. It drastically simplifies state management compared to Vanilla JS.</td>
+        </tr>
+        <tr>
+            <td><strong>Supabase</strong></td>
+            <td>Backend-as-a-Service (BaaS) & Database</td>
+            <td>Supabase provides an instant, secure PostgreSQL database with built-in authentication. It acts as an open-source alternative to Firebase, allowing us to implement secure user logins and persistent cloud storage without writing complex backend server code.</td>
+        </tr>
+        <tr>
+            <td><strong>Google Gemini AI</strong></td>
+            <td>Artificial Intelligence Processing</td>
+            <td>The Gemini 2.5 Flash model is incredibly fast and highly capable of natural language understanding. We use it to read the user's plain-text task and intelligently sort it into predefined categories.</td>
+        </tr>
+        <tr>
+            <td><strong>Vanilla CSS</strong></td>
+            <td>Styling & Aesthetics</td>
+            <td>To prove fundamental design competency, we utilized pure CSS with advanced techniques like Glassmorphism, CSS Grid, and animated mesh gradients rather than relying on heavy CSS frameworks like Bootstrap or Tailwind.</td>
+        </tr>
+    </table>
+
+    <h2>2. Core Features & How They Work</h2>
+
+    <h3>A. Secure Authentication Engine</h3>
+    <p>NexTask utilizes Supabase Auth for complete identity management. Instead of building a custom JWT system, we offload security to Supabase. When a user logs in, Supabase issues a secure session token. In our code, we use React's <code>useEffect</code> hook to listen to the <code>onAuthStateChange</code> event, ensuring the UI immediately reflects the user's logged-in status and securely fetches only <i>their</i> specific tasks from the database using Row Level Security (RLS).</p>
+
+    <h3>B. AI-Powered Task Categorization</h3>
+    <p>When a user submits a new task (e.g., "Finish the React tutorial video"), the application pauses the submission and sends the text string securely to the Google GenAI API. The system prompt forces the AI to respond with a single word (Coding, Coursework, Personal, or Other). This eliminates manual sorting for the user, creating a frictionless UX.</p>
+
+    <h3>C. Base64 Multi-File Uploads</h3>
+    <p>Users can attach up to 5 files per task (Max 5MB each). To simplify database architecture, we use the HTML5 <code>FileReader</code> API to convert physical files into <strong>Base64 Strings</strong>. These strings are stored directly inside a JSON array in the Supabase PostgreSQL database, ensuring all text and file data is synced perfectly without needing complex external Storage Buckets.</p>
+
+    <h3>D. Client-Side Background Alarms</h3>
+    <p>A background loop runs continuously via a <code>setInterval</code> inside a React <code>useEffect</code> hook. It compares the current system time against the database timestamps of active tasks. If a task is within 6 hours of its deadline, the state engine triggers a browser alert. It updates the database so the user is only warned once.</p>
+
+    <div class="page-break"></div>
+
+    <h2>3. Deep Dive: Understanding the Codebase</h2>
+    
+    <p>If you are reviewing this code for an interview, the most critical file is <code>app/page.js</code>. Here is a breakdown of the advanced React concepts utilized:</p>
+
+    <h3>State Management (React Hooks)</h3>
+    <p>Instead of manually manipulating the DOM with <code>document.getElementById</code>, we use the <code>useState</code> hook. When data changes, React automatically repaints the UI.</p>
+    <div class="code-block">
+// We store all tasks in an array. 
+// Calling setTasks() instantly updates the screen.
+const [tasks, setTasks] = useState([]);
+const [newTaskTitle, setNewTaskTitle] = useState('');
+    </div>
+
+    <h3>Asynchronous Data Fetching</h3>
+    <p>Because database reads and AI requests take time, we use modern ES6 <code>async/await</code> syntax to ensure the code executes sequentially without blocking the browser thread.</p>
+    <div class="code-block">
+const loadTasks = async () => {
+  // Wait for Supabase to return the user's data
+  const { data, error } = await supabaseClient
+    .from('tasks')
+    .select('*')
+    .order('created_at', { ascending: false });
+    
+  // Update the React State with the new data
+  if (data) setTasks(data);
+};
+    </div>
+
+    <h2>4. Project Folder Structure</h2>
+    <p>The repository adheres to the strict Next.js App Router conventions:</p>
+    <ul>
+        <li><code>app/page.js</code> — The main React component containing all business logic, UI state, and rendering.</li>
+        <li><code>app/layout.js</code> — Handles the global HTML document structure and Next.js metadata.</li>
+        <li><code>app/globals.css</code> — The global design system containing all CSS variables and classes.</li>
+        <li><code>lib/supabaseClient.js</code> — The initialization code connecting our app to the PostgreSQL backend.</li>
+        <li><code>package.json</code> — The Node.js dependency manifest containing the exact versions of React, Next, and Supabase required to run the project.</li>
+    </ul>
+
+    <h2>5. Running the Project Locally</h2>
+    <p>Because this is a Node.js project, running it requires a local Node environment.</p>
+    <ol>
+        <li>Download the project from GitHub and open a terminal in the project root.</li>
+        <li>Run <code>npm install</code> to download all required dependencies listed in <code>package.json</code>.</li>
+        <li>Run <code>npm run dev</code> to start the local development server.</li>
+        <li>Navigate to <code>http://localhost:3000</code> in any web browser.</li>
+    </ol>
+
+    <div style="text-align: center; margin-top: 50px; color: var(--text-light);">
+        <p>Built with ❤️ by arihant174 at IITK</p>
+    </div>
+
+</body>
+</html>
