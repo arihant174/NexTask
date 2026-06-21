@@ -2,7 +2,21 @@
 
 > **Association for Computing Activities, IITK** · June 2026
 
-A modern, full-stack task management application built to showcase enterprise-grade architecture. Recently migrated from a Vanilla JavaScript prototype to a production-ready **Next.js** application.
+## 🌟 What is NexTask?
+
+NexTask is a modern, full-stack productivity dashboard designed to help users organize their daily lives with the power of Artificial Intelligence. 
+
+Instead of manually sorting through endless lists of chores, assignments, and coding tasks, NexTask allows users to simply type what they need to do. The application automatically analyzes the text using Google's Gemini AI and instantly categorizes it into the correct bucket (Coding, Coursework, Personal, etc.). It features a beautiful, glassmorphic user interface and is backed by a secure, real-time cloud database.
+
+## ⚙️ How it Works
+
+1. **Authentication:** Users create an account or log in securely. Authentication is handled entirely by **Supabase Auth**, which issues secure session tokens.
+2. **Task Creation & AI Analysis:** When a user types a new task (e.g., "Finish the React frontend"), the text is sent securely to the **Google Gemini AI API**. The AI evaluates the context of the sentence and returns a specific category tag (e.g., "coding").
+3. **Data Storage & Attachments:** The task, along with its AI-generated category, deadline, and up to 5 attached files, is saved in a **Supabase PostgreSQL database**. Files are converted and stored as Base64 encoded strings for instant retrieval.
+4. **Live React Interface:** The frontend is built entirely in **Next.js**. As soon as the database confirms the task is saved, React's state management instantly updates the browser screen without ever needing to refresh the page.
+5. **Background Monitoring:** A silent JavaScript loop constantly monitors task deadlines in the background. If a deadline falls within 6 hours, it triggers an automatic browser alert to remind the user.
+
+---
 
 ## 🚀 Features
 
