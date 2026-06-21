@@ -1,58 +1,67 @@
-# NexTask — Local-First Productivity Dashboard
+# NexTask — AI-Powered Task Management Dashboard
 
 > **Association for Computing Activities, IITK** · June 2026
 
-A highly responsive, zero-dependency, local-first task management single-page application (SPA) built with modern Vanilla JavaScript.
+A modern, full-stack task management application built to showcase enterprise-grade architecture. Recently migrated from a Vanilla JavaScript prototype to a production-ready **Next.js** application.
 
 ## 🚀 Features
 
-- **Custom JWT Auth Engine** — Secure sign-in / sign-up flow utilizing a custom client-side HS256 JWT signature generation and verification system.
-- **Local-First Architecture** — Creates, reads, updates, and deletes tasks instantly using an optimized Web Storage API (LocalStorage) wrapper, meaning zero latency and offline support.
-- **Pub/Sub State Observer** — A custom event-driven publish-subscribe pattern to trigger live DOM updates dynamically without full page reloads.
-- **Dynamic Filtering** — Instant client-side filtering by status, priority, category, and full-text search directly through in-memory arrays.
-- **Canvas Analytics Dashboard** — Custom-built charting engine utilizing the HTML5 `<canvas>` API to render responsive donut and bar charts (Completion rates, Priority breakdown) with zero external dependencies.
-- **CI/CD Pipeline** — GitHub Actions integration for automated linting, testing, and edge network deployments on every push to `main`.
+- **Real-Time Database & Auth** — Completely powered by **Supabase** (PostgreSQL). Secure email/password authentication and persistent cloud storage.
+- **AI Task Categorization** — Integrated with the **Google Gemini API** to automatically categorize tasks into "Coding", "Coursework", or "Personal" using AI analysis on task creation.
+- **Multiple File Uploads** — Attach up to 5 files (Max 5MB each) per task seamlessly. The files are securely parsed, converted to Base64, and saved to the cloud database.
+- **Background Alarms** — A silent background loop constantly tracks deadlines. It automatically fires browser alerts if a task deadline falls within a 6-hour or 2-hour critical window.
+- **Glassmorphism UI** — A highly responsive, premium user interface utilizing CSS mesh gradients, blur filters, and fluid CSS grid layouts.
 
 ## 🛠 Tech Stack
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | HTML5, CSS3, Vanilla JavaScript (ES6+) |
-| Auth | Custom HS256 JWT Simulator |
-| Database | Browser Storage API (LocalStorage JSON Schema) |
-| State Loop | Vanilla JS Pub/Sub Observer Pattern |
-| Data Viz | HTML5 Canvas API |
-| CI/CD | GitHub Actions |
+| Framework | Next.js (App Router), React |
+| Backend & Auth | Supabase |
+| Artificial Intelligence | Google GenAI SDK (Gemini 2.5 Flash) |
+| Styling | Vanilla CSS (Globals) |
+| Package Manager | npm |
 
 ## 📁 Project Structure
 
-```
+```text
 XYZ/
-├── index.html                    # App shell — auth, sidebar, all views, modals
-├── style.css                     # Design system — tokens, components, animations
-├── app.js                        # Logic — auth, CRUD, filters, charts, state engine
-└── NexTask_Project_Documentation.html  # Full technical documentation (print to PDF)
+├── nextask-nextjs/               # Next.js Application Root
+│   ├── app/                      
+│   │   ├── page.js               # Main React Application Logic & State
+│   │   ├── layout.js             # HTML metadata & global font loading
+│   │   └── globals.css           # UI Design System & Component Styling
+│   ├── lib/
+│   │   └── supabaseClient.js     # Supabase initialization config
+│   ├── package.json              # Dependency map (React, Next, Supabase, GenAI)
+└── NexTask_Project_Documentation.html  # Legacy prototype documentation
 ```
 
 ## 🔧 Running Locally
 
-Just open `index.html` in your browser — **zero build steps and zero dependencies needed**.
+To run this project on your local machine, you must have **Node.js** installed.
 
-```bash
-# Or serve with any static file server
-npx serve .
-```
+1. Open your terminal and navigate to the project directory:
+   ```bash
+   cd nextask-nextjs
+   ```
 
-## 📄 Documentation
+2. Install the necessary dependencies (Next.js, Supabase, Google GenAI):
+   ```bash
+   npm install
+   ```
 
-Open `NexTask_Project_Documentation.html` in a browser and press `Ctrl+P → Save as PDF` for the full 10-section technical documentation outlining the architectural choices behind this vanilla JS single-page application.
+3. Start the Next.js development server:
+   ```bash
+   npm run dev
+   ```
 
-## 🔐 Demo Credentials
+4. Open your web browser and navigate to: [http://localhost:3000](http://localhost:3000)
 
-| Field | Value |
-|-------|-------|
-| Email | `demo@nextask.app` |
-| Password | `demo1234` |
+## 🔐 Configuration
+
+This application connects to a live Supabase instance by default via `lib/supabaseClient.js`. 
+To utilize the AI Categorization feature, you must input your own **Google Gemini API Key** directly through the UI via the "AI Settings" button in the header. The key is securely saved entirely client-side inside your browser's `localStorage`.
 
 ---
 
