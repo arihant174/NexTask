@@ -1,0 +1,25 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Secrets / Environment
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Node (if added later)
+node_modules/
+npm-debug.log*
+dist/
+build/
+.cache/
+
+# Vercel
+.vercel/
