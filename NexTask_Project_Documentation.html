@@ -447,11 +447,11 @@ tr:last-child td{border-bottom:none;}
 
   <p><strong>NexTask</strong> is a cloud-native, full-stack productivity dashboard engineered for high-performance task management at scale. Built under the <strong>Association for Computing Activities, IITK</strong>, it demonstrates modern software engineering principles including secure authentication, relational data integrity, real-time interactivity, and zero-downtime automated deployment.</p>
 
-  <p>The system allows users to create, read, update, and delete tasks with rich metadata — including priority levels, categories, due dates, and statuses — while providing real-time filtering, analytics, and a notification subsystem. Every component is built for production robustness: JWT-secured sessions, CI/CD-automated builds, and a PostgreSQL relational backend via Supabase.</p>
+  <p>The system allows users to create, read, update, and delete tasks with rich metadata — including priority levels, categories, due dates, and statuses — while providing real-time filtering, analytics, and a notification subsystem. Every component is built for production robustness: Custom JWT-secured sessions, CI/CD-automated builds, and a client-side local-first data store.</p>
 
   <div class="callout info">
     <span class="callout-icon">💡</span>
-    <div class="callout-body"><strong>Key Thesis:</strong> NexTask proves that a startup-quality, cloud-native SaaS product can be architected and shipped end-to-end — from database schema design to CI/CD pipeline — using modern open-source infrastructure (Supabase, GitHub Actions, Vercel) without sacrificing security, scalability, or user experience.</div>
+    <div class="callout-body"><strong>Key Thesis:</strong> NexTask proves that a startup-quality, local-first SaaS product can be architected and shipped end-to-end — from data schema design to CI/CD pipeline — using modern native browser APIs without sacrificing security, scalability, or user experience.</div>
   </div>
 
   <div class="metrics">
@@ -479,18 +479,18 @@ tr:last-child td{border-bottom:none;}
     </div>
     <div class="tech-card">
       <div class="tech-card-icon">🔐</div>
-      <div class="tech-card-name">Supabase Auth + JWT</div>
-      <div class="tech-card-desc">HS256-signed JSON Web Tokens for stateless session management. Tokens carry user claims and a 24-hour expiry, verified on every protected request.</div>
+      <div class="tech-card-name">Custom Client JWT Engine</div>
+      <div class="tech-card-desc">Custom HS256-signed JSON Web Tokens for stateless session management. Tokens carry user claims and a 24-hour expiry, verified on every local action.</div>
     </div>
     <div class="tech-card">
       <div class="tech-card-icon">🗄️</div>
-      <div class="tech-card-name">PostgreSQL</div>
-      <div class="tech-card-desc">Relational database managed by Supabase. Strict schema with primary keys, foreign keys, NOT NULL constraints, and Row Level Security (RLS) policies.</div>
+      <div class="tech-card-name">Web Storage API</div>
+      <div class="tech-card-desc">Local JSON database managed natively in the browser. Strict schema structures ensure data integrity and immediate local persistence.</div>
     </div>
     <div class="tech-card">
       <div class="tech-card-icon">⚡</div>
-      <div class="tech-card-name">Supabase Realtime</div>
-      <div class="tech-card-desc">WebSocket-based subscription to <code>postgres_changes</code> events — INSERT, UPDATE, DELETE — enabling live multi-tab and multi-user synchronization.</div>
+      <div class="tech-card-name">Pub/Sub State Observer</div>
+      <div class="tech-card-desc">Event-driven subscription to <code>state_changes</code> events — INSERT, UPDATE, DELETE — enabling live synchronization across the local view.</div>
     </div>
     <div class="tech-card">
       <div class="tech-card-icon">🚀</div>
