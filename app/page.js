@@ -136,7 +136,7 @@ export default function Home() {
     if (geminiKey) {
       try {
         const ai = new GoogleGenAI({ apiKey: geminiKey });
-        const prompt = `Categorize this task into EXACTLY ONE of these categories: "coding", "coursework", "personal", "other". Task: "${newTaskTitle}". Respond with ONLY the category word in lowercase.`;
+        const prompt = `Categorize this task into EXACTLY ONE of these categories: "coding" (programming, software), "coursework" (university, lectures, assignments, studying, classes), "personal" (gym, chores, life), "other". Task: "${newTaskTitle}". Respond with ONLY the category word in lowercase.`;
         const response = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
         const result = response.text.trim().toLowerCase();
         if (['coding', 'coursework', 'personal', 'other'].includes(result)) {
