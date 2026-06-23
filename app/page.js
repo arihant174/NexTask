@@ -13,6 +13,8 @@ export default function Home() {
   
   // Auth State
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isResetMode, setIsResetMode] = useState(false);
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -47,10 +49,15 @@ export default function Home() {
     };
     checkSession();
 
-    const { data: authListener } = supabaseClient.auth.onAuthStateChange((_event, newSession) => {
+    const { data: authListener } = supabaseClient.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession);
-      if (newSession) loadTasks();
-      else setTasks([]);
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecoveryMode(true);
+      } else if (newSession) {
+        loadTasks();
+      } else {
+        setTasks([]);
+      }
     });
 
     return () => authListener.subscription.unsubscribe();
@@ -124,6 +131,39 @@ export default function Home() {
     await supabaseClient.auth.signOut();
     setEmail('');
     setPassword('');
+    setIsRecoveryMode(false);
+  };
+
+  const handleResetRequest = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setAuthSuccess('');
+    if (!email) return;
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    });
+    if (error) {
+      setAuthError(error.message);
+    } else {
+      setAuthSuccess('Password reset email sent! Please check your inbox.');
+    }
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setAuthSuccess('');
+    if (!password) return;
+
+    const { error } = await supabaseClient.auth.updateUser({ password });
+    if (error) {
+      setAuthError(error.message);
+    } else {
+      setAuthSuccess('Password updated successfully!');
+      setIsRecoveryMode(false);
+      setPassword('');
+    }
   };
 
   const addTask = async (e) => {
@@ -264,32 +304,67 @@ export default function Home() {
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
               </svg>
               <h2>NexTask</h2>
-              <p>{isLoginMode ? 'Please enter your email to continue' : 'Register with email to sync tasks securely'}</p>
+              <p>
+                {isRecoveryMode ? 'Set your new password below' : 
+                 isResetMode ? 'Enter your email to receive a reset link' :
+                 isLoginMode ? 'Please enter your email to continue' : 
+                 'Register with email to sync tasks securely'}
+              </p>
             </div>
             
             {authError && <div className="auth-error">{authError}</div>}
             {authSuccess && <div className="auth-success">{authSuccess}</div>}
 
-            <form onSubmit={handleAuth}>
-              <div className="input-group">
-                <label>Email</label>
-                <input type="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
-              </div>
-              <div className="input-group">
-                <label>Password</label>
-                <input type="password" required placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} />
-              </div>
-              <button type="submit" className="btn-primary w-full">
-                {isLoginMode ? 'Log In' : 'Sign Up'}
-              </button>
-            </form>
-            
-            <div className="auth-toggle">
-              {isLoginMode ? "Don't have an account? " : "Already have an account? "}
-              <button type="button" className="btn-link" onClick={() => { setIsLoginMode(!isLoginMode); setAuthError(''); setAuthSuccess(''); }}>
-                {isLoginMode ? 'Sign Up' : 'Log In'}
-              </button>
-            </div>
+            {isRecoveryMode ? (
+              <form onSubmit={handleUpdatePassword}>
+                <div className="input-group">
+                  <label>New Password</label>
+                  <input type="password" required placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} />
+                </div>
+                <button type="submit" className="btn-primary w-full">Update Password</button>
+              </form>
+            ) : isResetMode ? (
+              <form onSubmit={handleResetRequest}>
+                <div className="input-group">
+                  <label>Email</label>
+                  <input type="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
+                </div>
+                <button type="submit" className="btn-primary w-full">Send Reset Link</button>
+                <div className="auth-toggle" style={{marginTop: '15px'}}>
+                  <button type="button" className="btn-link" onClick={() => { setIsResetMode(false); setAuthError(''); setAuthSuccess(''); }}>
+                    Back to Login
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleAuth}>
+                <div className="input-group">
+                  <label>Email</label>
+                  <input type="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
+                </div>
+                <div className="input-group">
+                  <label>Password</label>
+                  <input type="password" required placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} />
+                </div>
+                {isLoginMode && (
+                  <div style={{ textAlign: 'right', marginBottom: '15px', marginTop: '-10px' }}>
+                    <button type="button" className="btn-link" style={{ fontSize: '0.85rem' }} onClick={() => { setIsResetMode(true); setAuthError(''); setAuthSuccess(''); }}>
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
+                <button type="submit" className="btn-primary w-full">
+                  {isLoginMode ? 'Log In' : 'Sign Up'}
+                </button>
+                
+                <div className="auth-toggle" style={{marginTop: '15px'}}>
+                  {isLoginMode ? "Don't have an account? " : "Already have an account? "}
+                  <button type="button" className="btn-link" onClick={() => { setIsLoginMode(!isLoginMode); setAuthError(''); setAuthSuccess(''); }}>
+                    {isLoginMode ? 'Sign Up' : 'Log In'}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </>
