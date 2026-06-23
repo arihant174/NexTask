@@ -8,6 +8,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export default function Home() {
   const [session, setSession] = useState(null);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [geminiKey, setGeminiKey] = useState('');
   
@@ -46,6 +47,7 @@ export default function Home() {
       const { data: { session: currentSession } } = await supabaseClient.auth.getSession();
       setSession(currentSession);
       if (currentSession) loadTasks();
+      setIsInitializing(false);
     };
     checkSession();
 
@@ -292,6 +294,17 @@ export default function Home() {
     const matchesStatus = statusFilter === 'all' || (statusFilter === 'completed' ? task.completed : !task.completed);
     return matchesSearch && matchesCategory && matchesStatus;
   });
+
+  if (isInitializing) {
+    return (
+      <>
+        <div className="bg-mesh"></div>
+        <div className="screen" style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <div className="spinner" style={{ width: '40px', height: '40px', borderWidth: '4px', borderColor: 'rgba(255,255,255,0.1)', borderTopColor: 'var(--primary)' }}></div>
+        </div>
+      </>
+    );
+  }
 
   if (!session) {
     return (
