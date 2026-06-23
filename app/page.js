@@ -295,6 +295,20 @@ export default function Home() {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
+  // Stats Calculations
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(t => t.completed).length;
+  const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  
+  const categories = ['coding', 'coursework', 'personal', 'other'];
+  const categoryStats = categories.map(cat => {
+    const catTasks = tasks.filter(t => t.category === cat);
+    const catCompleted = catTasks.filter(t => t.completed).length;
+    const catTotal = catTasks.length;
+    const catRate = catTotal > 0 ? Math.round((catCompleted / catTotal) * 100) : 0;
+    return { name: cat, total: catTotal, completed: catCompleted, rate: catRate };
+  });
+
   if (isInitializing) {
     return (
       <>
@@ -584,8 +598,32 @@ export default function Home() {
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </div>
-            <div style={{textAlign: 'center', color: 'var(--text-muted)'}}>
-              Stats dashboard successfully migrated! <br/> (Circular logic integration in progress)
+            <div className="stats-dashboard">
+              <div className="stats-overview" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px' }}>
+                <div className="stat-box" style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '12px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--primary)', lineHeight: 1 }}>{completionRate}%</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '5px' }}>Completion Rate</div>
+                </div>
+                <div className="stat-box" style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '12px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 'bold', lineHeight: 1 }}>{completedTasks} / {totalTasks}</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '5px' }}>Tasks Completed</div>
+                </div>
+              </div>
+              
+              <h4 style={{ marginBottom: '15px', fontSize: '0.95rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Category Breakdown</h4>
+              <div className="stats-categories" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {categoryStats.map(cat => (
+                  <div key={cat.name} className="cat-stat-row">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.9rem' }}>
+                      <span style={{ textTransform: 'capitalize', fontWeight: '500' }}>{cat.name}</span>
+                      <span style={{ color: 'var(--text-muted)' }}>{cat.completed} / {cat.total} ({cat.rate}%)</span>
+                    </div>
+                    <div className="progress-bar-bg" style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div className={`progress-bar-fill`} style={{ width: `${cat.rate}%`, height: '100%', borderRadius: '4px', transition: 'width 0.5s ease-out', background: cat.name === 'coding' ? 'var(--primary)' : cat.name === 'coursework' ? 'var(--purple)' : cat.name === 'personal' ? 'var(--success)' : 'var(--warning)' }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
