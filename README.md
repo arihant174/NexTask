@@ -1,11 +1,28 @@
 # NexTask - AI Powered Task Manager
 **Live Demo:** [https://nex-task-wlb1.vercel.app](https://nex-task-wlb1.vercel.app)
 
-NexTask is an enterprise-grade task management system built with Next.js, Supabase, and Google Gemini AI.
+## About The Project
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+NexTask is an intelligent, productivity-focused task management system. It is designed to help students and professionals organize their daily tasks effortlessly. 
 
-## Getting Started
+**Key Features & Use Cases:**
+- **Smart Categorization:** Uses AI to automatically read your task titles (like "finish EE250 assignment") and instantly categorize them into the correct bucket (e.g., Coursework, Coding, Personal).
+- **Productivity Tracking:** Features a built-in dashboard that calculates your completion rates and provides visual progress bars for each category.
+- **Secure Cloud Sync:** Allows you to log in from anywhere using secure email authentication and keeps all your tasks perfectly synced across devices in real-time.
+
+## Tech Stack
+
+This project was built using modern web technologies to ensure a fast, secure, and responsive user experience:
+
+- **Frontend Framework:** [Next.js](https://nextjs.org/) (React)
+- **Styling:** Pure CSS (with modern variables and glassmorphism UI)
+- **Database & Authentication:** [Supabase](https://supabase.com/) (PostgreSQL backend)
+- **Artificial Intelligence:** [Google Gemini API](https://deepmind.google/technologies/gemini/) (for smart task categorization)
+- **Deployment:** [Vercel](https://vercel.com/)
+
+---
+
+## Getting Started Locally
 
 First, run the development server:
 
@@ -19,23 +36,4 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. You will need to add your own Supabase credentials in the codebase to test the database locally.
