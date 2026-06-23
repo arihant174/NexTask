@@ -16,6 +16,7 @@ export default function Home() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isResetMode, setIsResetMode] = useState(false);
   const [isRecoveryMode, setIsRecoveryMode] = useState(false);
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -119,12 +120,17 @@ export default function Home() {
       const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
       if (error) setAuthError(error.message);
     } else {
-      const { error } = await supabaseClient.auth.signUp({ email, password });
+      const { error } = await supabaseClient.auth.signUp({ 
+        email, 
+        password,
+        options: { data: { full_name: fullName } }
+      });
       if (error) {
         setAuthError(error.message);
       } else {
         setAuthSuccess("Success! You can now log in.");
         setIsLoginMode(true);
+        setFullName('');
       }
     }
   };
@@ -286,7 +292,8 @@ export default function Home() {
   };
 
   // Rendering helpers
-  const username = session?.user?.email?.split('@')[0] || '';
+  const savedFullName = session?.user?.user_metadata?.full_name;
+  const username = savedFullName ? savedFullName.split(' ')[0] : 'Buddy';
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -365,6 +372,12 @@ export default function Home() {
               </form>
             ) : (
               <form onSubmit={handleAuth}>
+                {!isLoginMode && (
+                  <div className="input-group">
+                    <label>Full Name</label>
+                    <input type="text" required placeholder="John Doe" value={fullName} onChange={e => setFullName(e.target.value)} />
+                  </div>
+                )}
                 <div className="input-group">
                   <label>Email</label>
                   <input type="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
