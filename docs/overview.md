@@ -89,10 +89,32 @@ A one-line `if/else` statement used directly inside the HTML/JSX.
 
 ---
 
-## 3. Tech Stack Summary
-If asked "What is the tech stack?", proudly list:
-* **Frontend:** Next.js (React)
-* **Styling:** Pure CSS (Custom Glassmorphism Design System)
-* **Backend / Database:** Supabase (PostgreSQL & Auth)
-* **AI Engine:** Google Gemini API
-* **Deployment:** Vercel
+## 3. Tech Stack Breakdown & Data Flow
+If an interviewer asks you about your tech stack and how the architecture connects, here is exactly how you should break it down.
+
+### The Technologies
+1. **Next.js & React (The Front-of-House)**
+   * **What it is:** React builds the buttons, input fields, and layout. Next.js is the framework that powers React and makes it lightning fast.
+   * **Its purpose:** It manages what the user sees and interacts with, remembering what the user types (using `useState`) and instantly updating the screen without reloading the page.
+2. **Pure CSS (The Interior Designer)**
+   * **What it is:** The styling language of the web.
+   * **Its purpose:** Used to build a custom, modern "frosted glass" (glassmorphism) aesthetic from scratch, avoiding heavy pre-made templates like Bootstrap.
+3. **Supabase (The Kitchen & The Vault)**
+   * **What it is:** A Backend-as-a-Service (BaaS) providing a PostgreSQL database and an Authentication system.
+   * **Its purpose:** Acts as **The Vault** by safely checking user emails/passwords. Acts as **The Kitchen** by permanently storing every task in a cloud database.
+4. **Google Gemini API (The Smart Consultant)**
+   * **What it is:** A cloud-based Artificial Intelligence model.
+   * **Its purpose:** Analyzes task strings to automatically categorize them (e.g., "coding", "coursework"), saving users the effort of manual sorting.
+5. **Vercel (The Host)**
+   * **What it is:** A cloud hosting platform optimized for Next.js.
+   * **Its purpose:** Takes the codebase and hosts it on a public web address (`nex-task-wlb1.vercel.app`) with continuous deployment.
+
+### How it all connects (The Data Flow)
+To impress an interviewer, explain the exact flow of data when a user adds a task:
+
+> *"When a user types 'Finish math homework' and clicks Add Task...*
+> 1. *My **React** frontend captures that text.*
+> 2. *It immediately sends a request over the internet to the **Google Gemini API**, asking it to read the text. Gemini responds with the category word: 'Coursework'.*
+> 3. *My app takes the text and the new category, and securely sends it to my **Supabase** database.*
+> 4. *Supabase saves it into PostgreSQL and sends back a success message.*
+> 5. *Finally, **React** sees the success message and instantly updates the UI to show the new task on the screen—all in less than a second!"*
